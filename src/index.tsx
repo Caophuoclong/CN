@@ -5,13 +5,28 @@ import App from '~/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import {ChakraProvider} from '@chakra-ui/react';
+import {Auth0Provider} from '@auth0/auth0-react';
+import {AUTH_DOMAIN, AUTH_CLIENT_ID} from './configs';
+import {Provider} from 'react-redux';
+import store from './app/store';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
-  <ChakraProvider>
-    <App />
-  </ChakraProvider>
+  <Auth0Provider
+    domain={AUTH_DOMAIN}
+    clientId={AUTH_CLIENT_ID}
+    redirectUri={window.location.origin}
+    audience={`https://${AUTH_DOMAIN}/api/v2/`}
+    scope="read:current_user update:current_user_metadata"
+  >
+    <Provider store={store}>
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
+    </Provider>
+  </Auth0Provider>
 );
 
 // If you want your app to work offline and load faster, you can change
